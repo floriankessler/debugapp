@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+/usr/bin/tmux attach || /usr/bin/tmux

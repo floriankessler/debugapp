@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# Access arbitrary application logs from within the container
+#
+# Docker emits stdout/stderr of PID 1 onto our local console during, say 
+# 'docker run'.
+#
+# Best practice (https://12factor.net/logs) demands, that each running process 
+# writes its event stream, unbuffered, to stdout. 
+#
+# The baseimage we use -phusion/baseimage- already goes to great length to 
+# provide services within the image with logging. Eg. we can just easily add 
+# services, log to stdout/stderr and have logs show up.
+#
+# In other envs, though, a console access might at least hard to come by! Say, 
+# Beanstalk managed by Festo with no possibility for us to access.
+#
+# With only the front channel -ie the container called via browser- remaining, 
+# we need to mirror stdout/stderr of PID 1 into the container instance.
+#
+# To do so, we extend the existing process called at start and 
+#
+# - redirect stdout for PID1 -- exec 1>
+# - to a JIT provided pipe, that pipes to stdout, so that we still see logs 
+#     during 'docker run -- >(tee ...)
+# - AND pipes to another JIT provided pipe, that
+#     - prepends events with a timestamp and
+#     - writes them to /var/log/dockerconsole/current and
+#     - logrotates them, see http://smarden.org/runit/svlogd.8.html
+#     -- >(svlogd ...)
+# - all that is done for stderr of PID 1 too -- 2>&1
+#
+# Good luck still understanding that in half a year...
+#
+# https://wiki.bash-hackers.org/howto/redirection_tutorial
+# http://mywiki.wooledge.org/BashFAQ/055
+# http://mywiki.wooledge.org/BashGuide/InputAndOutput
+# https://stackoverflow.com/questions/692000/how-do-i-write-stderr-to-a-file-while-using-tee-with-a-pipe
+
+mkdir /var/log/dockerconsole
+exec 1> >(tee >(svlogd -tt /var/log/dockerconsole/)) 2>&1
+
+/sbin/my_init "$@"

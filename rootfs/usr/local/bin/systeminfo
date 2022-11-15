@@ -1,0 +1,6 @@
+
+cat /etc/app-release
+
+echo; echo -n "HOSTNAME="; /bin/hostname -f
+echo; echo "MEMORY (free -m): "; free -m
+echo; echo "CPUs (/proc/cpuinfo): "; cat /proc/cpuinfo

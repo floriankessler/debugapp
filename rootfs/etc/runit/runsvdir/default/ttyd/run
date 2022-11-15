@@ -1,0 +1,4 @@
+#!/bin/bash
+
+chmod +x /usr/local/bin/tmux-helper
+exec /usr/local/sbin/ttyd -p 8081 /usr/local/bin/tmux-helper
