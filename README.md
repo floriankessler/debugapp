@@ -1,5 +1,7 @@
 # README
 
+Provide a shell into and a complete log within the container. To troubleshoot any container execution engine / orchestrator from within...
+
 The resulting docker image offers
 
 - http://localhost/
