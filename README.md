@@ -2,11 +2,11 @@
 
 The resulting docker image offers
 
-http://localhost/
-http://localhost/stackadm/debug/ttyd
-http://localhost/stackadm/debug/headers
-http://localhost/stackadm/debug/headersJson
-http://localhost/stackadm/debug/systeminfo
+- http://localhost/
+- http://localhost/stackadm/debug/ttyd
+- http://localhost/stackadm/debug/headers
+- http://localhost/stackadm/debug/headersJson
+- http://localhost/stackadm/debug/systeminfo
 
 ## Start app
 
